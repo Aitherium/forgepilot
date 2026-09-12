@@ -1,0 +1,26 @@
+{
+  "run_id": "20260912T200832Z",
+  "created_at": "2026-09-12T20:08:32.718654+00:00",
+  "files": {
+    "request.json": {
+      "sha256": "99dadf4f9cf3b2bfb98377a297b5b90676e04a7337d2b02e885962651ee09c0a",
+      "bytes": 219
+    },
+    "research.json": {
+      "sha256": "c5e766134f7aadc96b30cca073ea5794f5b5f24fee8deb83bdd5c7565a593614",
+      "bytes": 432
+    },
+    "response.json": {
+      "sha256": "4bfa6046f946f25e458ed9538af720d90002ca3405bdadc01ce86924956c7177",
+      "bytes": 248
+    },
+    "stack.json": {
+      "sha256": "5b167fcab5b40656dd667f53abd30bfc5e2ca51035e005ade0030c0dc2bc8df0",
+      "bytes": 211
+    },
+    "report.md": {
+      "sha256": "39b86b4616e8cbb5c236e4442bde405016c8b99294c7cf1e4822668e2bd4cdec",
+      "bytes": 873
+    }
+  }
+}

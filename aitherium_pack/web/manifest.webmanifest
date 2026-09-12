@@ -1,0 +1,10 @@
+{
+  "name": "ForgePilot — Agents Everywhere",
+  "short_name": "ForgePilot",
+  "description": "Aitherium agent bootstrapper for Codex, Claude, MCP, and local inference.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#090b12",
+  "theme_color": "#090b12",
+  "icons": [{"src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+}

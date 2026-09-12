@@ -1,0 +1,17 @@
+name: agents-everywhere-demo-tool
+display_name: "Agents Everywhere Demo Tool"
+version: 0.1.0
+description: "A shareable MCP and WebMCP tool for local agents"
+interfaces:
+  - mcp
+  - webmcp
+  - pwa
+trust:
+  human_gate: awnest
+  front_door: awnboard
+  identity: awiam
+  policy: awbac
+  audit: awdit
+capabilities:
+  - mcp.tools
+  - workspace.read

@@ -1,0 +1,59 @@
+name: Deploy ForgePilot to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install the pack
+        run: python -m pip install --upgrade pip && python -m pip install -e .
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build static PWA
+        run: |
+          python -m aitherium_pack publish --output _site --mcp-endpoint "${FORGEPILOT_MCP_ENDPOINT:-/mcp}"
+          touch _site/.nojekyll
+          cp _site/index.html _site/404.html
+        env:
+          # Optional repository variable. Leave unset for the user-configured
+          # endpoint panel, or set it to a shared authenticated HTTPS /mcp URL.
+          FORGEPILOT_MCP_ENDPOINT: ${{ vars.FORGEPILOT_MCP_ENDPOINT }}
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

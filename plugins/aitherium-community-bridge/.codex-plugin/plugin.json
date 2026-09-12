@@ -1,0 +1,19 @@
+{
+  "name": "aitherium-community-bridge",
+  "version": "0.1.0",
+  "description": "Connect ARC and AWGym agents to awrelay, Relay, Forums, Spaces, and AwDesk with explicit human approval.",
+  "author": {
+    "name": "Local developer"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Aitherium Community Bridge",
+    "shortDescription": "Connect agents to the Aitherium community loop.",
+    "longDescription": "Plan and package safe connections from ARC/AWGym through awrelay into Relay, Forums, Spaces, and AwDesk.",
+    "developerName": "Aitherium Hackathon",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Help me use Aitherium Community Bridge."
+  },
+  "mcpServers": "./.mcp.json"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "aitherium-community-bridge",
+  "display_name": "Aitherium Community Bridge",
+  "version": "0.1.0",
+  "interfaces": [
+    "mcp",
+    "awsh",
+    "arc",
+    "awgym",
+    "awrelay",
+    "awdesk"
+  ],
+  "surfaces": {
+    "arc": "https://arc.aitherium.com/",
+    "relay": "https://relay.aitherium.com/",
+    "forums": "https://api.aitherium.com/",
+    "spaces": "https://api.aitherium.com/",
+    "awdesk": "https://github.com/Aitherium/awdesk",
+    "awgym": "https://github.com/Aitherium/awgym",
+    "awrelay": "https://github.com/Aitherium/awrelay",
+    "awsettings": "https://github.com/Aitherium/awsettings"
+  },
+  "created_at": "2026-09-12T20:38:25.690782+00:00",
+  "secrets": "none"
+}

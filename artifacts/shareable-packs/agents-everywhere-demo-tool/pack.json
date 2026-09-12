@@ -1,0 +1,25 @@
+{
+  "name": "agents-everywhere-demo-tool",
+  "display_name": "Agents Everywhere Demo Tool",
+  "version": "0.1.0",
+  "description": "Find the official MCP setup for this project and give me a safe Codex + Claude integration plan.",
+  "interfaces": [
+    "mcp",
+    "webmcp",
+    "pwa"
+  ],
+  "auth": {
+    "front_door": "awnboard",
+    "identity": "awiam",
+    "policy": "awbac",
+    "audit": "awdit"
+  },
+  "capabilities": [
+    "mcp.tools"
+  ],
+  "created_at": "2026-09-12T19:37:58.092158+00:00",
+  "entrypoints": {
+    "local": "python -m aitherium_pack serve",
+    "phone": "authenticated HTTPS MCP endpoint"
+  }
+}

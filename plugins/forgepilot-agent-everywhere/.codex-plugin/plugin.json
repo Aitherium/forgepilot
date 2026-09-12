@@ -1,0 +1,31 @@
+{
+  "name": "forgepilot-agent-everywhere",
+  "version": "0.1.1",
+  "description": "Bootstrap local Aitherium agents, MCP, Bonsai inference, and desktop connections from Codex.",
+  "author": {
+    "name": "Aitherium Hackathon Builder",
+    "email": "david@aitherium.com",
+    "url": "https://aitherium.com/"
+  },
+  "homepage": "https://aitherium.com/get/",
+  "repository": "https://github.com/Aitherium/awdk",
+  "license": "MIT",
+  "keywords": ["aitherium", "awdk", "mcp", "bonsai", "codex", "claude", "local-inference"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Forgepilot Agent Everywhere",
+    "shortDescription": "Use Forgepilot Agent Everywhere in Codex.",
+    "longDescription": "A Codex plugin that bootstraps a first local agent, connects the ForgePilot MCP server, and guides users through awdk, Bonsai, awsh, Claude, OpenRouter, and AitherOS surfaces.",
+    "developerName": "Aitherium Hackathon Builder",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "websiteURL": "https://aitherium.com/",
+    "defaultPrompt": [
+      "Bootstrap my first local ForgePilot agent.",
+      "Connect ForgePilot to Codex and Claude.",
+      "Create a signed Agents Everywhere demo artifact."
+    ],
+    "brandColor": "#69E2FF"
+  },
+  "mcpServers": "./.mcp.json"
+}

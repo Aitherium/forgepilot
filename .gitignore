@@ -1,0 +1,13 @@
+.venv/
+.env
+__pycache__/
+*.pyc
+integrations/generated/
+.test-artifacts/
+.forgepilot/
+dist/
+*.log
+
+# upstream checkouts used while contributing (AitherZero, awskills) - not part of this repo
+contrib/
+

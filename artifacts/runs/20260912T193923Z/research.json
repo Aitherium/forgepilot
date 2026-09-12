@@ -1,0 +1,13 @@
+{
+  "mode": "demo",
+  "query": "Prove that Codex reached the ForgePilot MCP plugin and planned a guarded local Bonsai-27B acceleration flow.",
+  "results": [
+    {
+      "title": "Add EXA_API_KEY for live research",
+      "url": "https://docs.exa.ai/reference/search-api-guide-for-coding-agents",
+      "highlights": [
+        "ForgePilot is running in offline demo mode."
+      ]
+    }
+  ]
+}

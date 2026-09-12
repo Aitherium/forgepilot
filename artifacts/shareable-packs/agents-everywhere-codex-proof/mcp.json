@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "agents-everywhere-codex-proof": {
+      "command": "python",
+      "args": [
+        "-m",
+        "aitherium_pack",
+        "mcp"
+      ]
+    }
+  }
+}

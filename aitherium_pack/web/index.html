@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ForgePilot — a static Aitherium agent control room for self-hosted MCP nodes." />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#090b12" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="ForgePilot" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <title>ForgePilot — Agent Integration Architect</title>
+  <style>
+    :root { color-scheme: dark; --bg:#090b12; --panel:#111522; --line:#29304a; --text:#ecf0ff; --muted:#8f9ab8; --cyan:#69e2ff; --violet:#9f8bff; --green:#70e0a6; --red:#ff8f9f; }
+    * { box-sizing:border-box; } body { margin:0; font-family: Inter, ui-sans-serif, system-ui, sans-serif; color:var(--text); background:radial-gradient(circle at 20% 0%,#20204b 0,#090b12 42%); min-height:100vh; }
+    main { max-width:1180px; margin:0 auto; padding:48px 24px 80px; } .eyebrow { color:var(--cyan); letter-spacing:.16em; text-transform:uppercase; font-size:12px; font-weight:700; }
+    h1 { font-size:clamp(42px,7vw,84px); line-height:.95; max-width:760px; margin:16px 0; letter-spacing:-.06em; } h1 span { color:var(--violet); }
+    .lede { max-width:650px; color:var(--muted); font-size:18px; line-height:1.6; } .grid { display:grid; grid-template-columns:1.1fr .9fr; gap:18px; margin-top:36px; } .panel { background:rgba(17,21,34,.86); border:1px solid var(--line); border-radius:20px; padding:22px; box-shadow:0 20px 80px #0005; }
+    label { display:block; color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.1em; margin-bottom:9px; } input, textarea { width:100%; color:var(--text); background:#0b0e18; border:1px solid var(--line); border-radius:12px; padding:12px 15px; font:inherit; } textarea { min-height:132px; resize:vertical; } button { cursor:pointer; border:1px solid transparent; border-radius:10px; padding:11px 15px; color:#071018; background:var(--cyan); font-weight:750; margin-top:12px; transition:background .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease; } button.secondary { color:var(--text); background:#222942; margin-left:8px; } button:hover { transform:translateY(-1px); box-shadow:0 8px 20px #0005; } button:focus-visible, input:focus-visible, textarea:focus-visible { outline:2px solid var(--cyan); outline-offset:3px; } button:active { transform:translateY(1px); } button.active, button[aria-pressed="true"] { color:#fff; background:linear-gradient(135deg,var(--violet),#6355d8); border-color:#c0b6ff; box-shadow:0 0 0 2px #9f8bff44, 0 10px 28px #0007; } .status { color:var(--green); min-height:22px; margin:16px 0 0; font-size:13px; } .status.error { color:var(--red); } pre { white-space:pre-wrap; word-break:break-word; color:#c5d0ee; line-height:1.5; font-size:13px; max-height:360px; overflow:auto; } .chips { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; } .chip { border:1px solid var(--line); color:var(--muted); border-radius:999px; padding:7px 10px; font-size:12px; } .tool { padding:13px 0; border-bottom:1px solid var(--line); } .tool:last-child { border-bottom:0; } .tool b { color:var(--cyan); } .small { color:var(--muted); font-size:13px; line-height:1.5; } .connection-grid { display:grid; grid-template-columns:1.6fr .8fr; gap:12px; } .buttonLink { display:inline-block; color:var(--cyan); margin:14px 0 0 10px; } @media(max-width:800px){.grid{grid-template-columns:1fr}.connection-grid{grid-template-columns:1fr} main{padding-top:28px}}
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Aitherium × aw*stack × Codex × Claude × WebMCP</div>
+  <h1>Build the tool <span>that builds the tools.</span></h1>
+  <p class="lede">This demo is its own hackathon process: start with an idea, research it, wire the local aw* stack, gate it with identity and policy, then ship a shareable MCP + WebMCP + PWA pack for the next builder.</p>
+  <div class="chips"><div class="chip">static client</div><div class="chip">awdk pack</div><div class="chip">MCP JSON-RPC</div><div class="chip">WebMCP page tools</div><div class="chip">read-only by default</div></div>
+  <section class="panel" aria-labelledby="connection-title">
+    <div class="eyebrow">Self-hosted connection</div>
+    <h2 id="connection-title">Bring your own MCP node.</h2>
+    <p class="small">This page is static. Point it at your own ForgePilot/Aitherium MCP server, running locally, on your LAN, or behind authenticated HTTPS. The endpoint is saved in this browser; the optional bearer token is never persisted or sent until you press an action button.</p>
+    <div class="connection-grid">
+      <div><label for="mcpEndpoint">MCP endpoint</label><input id="mcpEndpoint" type="url" inputmode="url" placeholder="https://your-host.example/mcp" autocomplete="url" spellcheck="false" /></div>
+      <div><label for="mcpToken">Bearer token · memory only</label><input id="mcpToken" type="password" placeholder="Optional" autocomplete="off" spellcheck="false" /></div>
+    </div>
+    <button id="saveConnection">Save endpoint</button><button class="secondary" id="testConnection">Test connection</button><button class="secondary" id="clearConnection">Clear</button>
+    <div class="status" id="connectionStatus" role="status"></div>
+  </section>
+  <section class="grid">
+    <div class="panel">
+      <label for="request">What are you trying to integrate?</label>
+      <textarea id="request">Turn this hackathon workflow into a shareable Codex + Claude + WebMCP pack with a local Bonsai path, awnboard authorization, and a phone-ready PWA.</textarea>
+      <button id="run">Research + architect</button><button class="secondary" id="artifact">Package artifact</button><button class="secondary" id="sharePack">Create shareable pack</button><button class="secondary" id="connectorPack">Configure Codex + Claude</button><button class="secondary" id="configs">Show configs</button>
+      <div class="status" id="status"></div><pre id="output">Your grounded plan will appear here.</pre>
+    </div>
+    <div class="panel"><div class="eyebrow">Live tool surface</div><h2>One pack, multiple doors.</h2><p class="small">The same capabilities are exposed to remote MCP clients and to a browser agent that can see this page. WebMCP is optional: the buttons keep working in ordinary browsers.</p><div id="tools"></div></div>
+  </section>
+  <section class="panel" style="margin-top:18px">
+    <div class="eyebrow">The hackathon loop</div>
+    <h2>Idea → connected agent → reusable artifact.</h2>
+    <p class="small">Every button is a stage in the build process. The output is not a throwaway demo: it is a connector, a policy envelope, a PWA, a WebMCP surface, and a hashed handoff someone else can apply.</p>
+    <div class="chips"><div class="chip">1 · describe</div><div class="chip">2 · research</div><div class="chip">3 · bootstrap</div><div class="chip">4 · authorize</div><div class="chip">5 · connect</div><div class="chip">6 · share</div></div>
+  </section>
+  <section class="panel" style="margin-top:18px">
+    <div class="eyebrow">Agents Everywhere bootstrap</div>
+    <h2>From zero to a local node.</h2>
+    <p class="small">Choose the path that matches your machine. Every path ends at the same ForgePilot identity and MCP surface.</p>
+    <button class="secondary" id="localPath">Local-first · Bonsai</button><button class="secondary" id="acceleratePath">Activate Bonsai-27B stack</button><button class="secondary" id="backendPath">Switch Claude → DeepSeek Flash</button><button class="secondary" id="securityPath">Secure with awnboard</button><button class="secondary" id="cloudPath">Cloud-first · awdk</button><button class="secondary" id="connectPath">Connect Codex / Claude / awsh</button><button class="secondary" id="devicePath">Aitherium device flow</button>
+    <pre id="bootstrapOutput">Select a bootstrap lane to get the exact commands.</pre>
+  </section>
+  <section class="panel" style="margin-top:18px">
+    <div class="eyebrow">Phone + LAN + self-service</div>
+    <h2>Carry your agent everywhere.</h2>
+    <p class="small">Use this page as an installable PWA on a phone, keep inference on a trusted LAN, or publish the UI yourself. The client only talks to an authenticated HTTPS MCP endpoint that you choose.</p>
+    <button class="secondary" id="phonePath">Install on phone</button><button class="secondary" id="lanPath">Run on local LAN</button><button class="secondary" id="publishPath">Publish your own page</button>
+    <pre id="mobilityOutput">Choose a path for a phone-ready setup checklist.</pre>
+    <div class="small" style="margin-top:12px">Desktop homes: <a href="https://aitherium.com/" target="_blank">AitherOS Online</a> · <a href="https://github.com/Aitherium/awdesk" target="_blank">Aither World Desk</a> · <a href="https://github.com/ElodineOfficial/gobbonet" target="_blank">GobboNet local LAN</a></div>
+  </section>
+  <section class="panel" style="margin-top:18px">
+    <div class="eyebrow">Community loop</div>
+    <h2>From agent run to living world.</h2>
+    <p class="small">Show ARC, train or evaluate in AWGym, move coordination through awrelay, then hand the same identity to Relay, Forums, Spaces, and AwDesk.</p>
+    <button class="secondary" id="communityPlan">Plan ARC → Relay → Spaces</button><button class="secondary" id="communityPack">Package community bridge</button>
+    <a class="buttonLink" href="https://arc.aitherium.com/" target="_blank" rel="noreferrer">Open ARC</a>
+    <pre id="communityOutput">Choose the community loop to get the install, identity, and demo sequence.</pre>
+  </section>
+  <footer class="small" style="margin-top:22px;text-align:center">ForgePilot is the static client. Your MCP node, credentials, models, and community identity remain under your control.</footer>
+</main>
+<script src="./config.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const actionButtons = [...document.querySelectorAll('button')];
+function markActive(button) {
+  actionButtons.forEach((item) => {
+    const active = item === button;
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+}
+actionButtons.forEach((button) => button.addEventListener('click', () => markActive(button)));
+const endpointStorageKey = 'forgepilot.mcpEndpoint';
+const defaultEndpoint = window.FORGEPILOT_MCP_ENDPOINT || '/mcp';
+let bearerToken = '';
+const savedEndpoint = window.localStorage ? localStorage.getItem(endpointStorageKey) : '';
+$('mcpEndpoint').value = savedEndpoint || defaultEndpoint;
+function setConnectionStatus(message, error = false) {
+  $('connectionStatus').textContent = message;
+  $('connectionStatus').classList.toggle('error', error);
+}
+function endpointValue() {
+  const value = $('mcpEndpoint').value.trim() || defaultEndpoint;
+  if (!value.startsWith('/') && !/^https:\/\//i.test(value)) throw new Error('MCP endpoint must be a relative /mcp path or an HTTPS URL.');
+  return value;
+}
+function persistEndpoint() {
+  const value = endpointValue();
+  const previous = window.localStorage ? localStorage.getItem(endpointStorageKey) : null;
+  if (previous && previous !== value && $('mcpToken').value) {
+    $('mcpToken').value = '';
+    bearerToken = '';
+    setConnectionStatus('Endpoint changed; cleared the previous in-memory token. Save again, then test the new node.');
+    if (window.localStorage) localStorage.setItem(endpointStorageKey, value);
+    return value;
+  }
+  if (window.localStorage) localStorage.setItem(endpointStorageKey, value);
+  setConnectionStatus(`Endpoint ready: ${value} · token stays in memory only`);
+  return value;
+}
+function endpointForDisplay(value) { try { return new URL(value, document.baseURI).toString(); } catch { return value; } }
+$('saveConnection').onclick = () => { try { persistEndpoint(); } catch (e) { setConnectionStatus(String(e), true); } };
+$('clearConnection').onclick = () => { if (window.localStorage) localStorage.removeItem(endpointStorageKey); $('mcpEndpoint').value = defaultEndpoint; $('mcpToken').value = ''; bearerToken = ''; setConnectionStatus('Cleared. The static client is ready for a new endpoint.'); };
+$('testConnection').onclick = async () => { try { persistEndpoint(); const data = await call('forgepilot_health', {}); setConnectionStatus(`Connected: ${data.pack || 'MCP server'} ${data.version || ''}`.trim()); } catch (e) { setConnectionStatus(String(e), true); } };
+const tools = [
+  {name:'forgepilot_health', description:'Check local runtime and provider status.'},
+  {name:'forgepilot_search', description:'Find primary docs with Exa highlights.'},
+  {name:'forgepilot_chat', description:'Draft a grounded integration plan.'},
+  {name:'forgepilot_generate_config', description:'Emit portable MCP client snippets.'},
+  {name:'forgepilot_create_artifact', description:'Package a report, evidence, response, and hashed integrity manifest.'}
+  ,{name:'forgepilot_start_device_flow', description:'Start a consent-scoped Aitherium device-flow handoff without returning a token.'}
+  ,{name:'forgepilot_local_acceleration_plan', description:'Inspect aw* presence and plan Bonsai-27B acceleration for Codex and Claude Code.'}
+  ,{name:'forgepilot_create_shareable_pack', description:'Scaffold a portable MCP + WebMCP + PWA agent tool pack.'}
+  ,{name:'forgepilot_create_connector_artifact', description:'Generate runnable Claude Code and Codex MCP configs and bootstrap scripts.'}
+  ,{name:'forgepilot_backend_switch_plan', description:'Show a safe adk/awsettings plan for switching Claude Code providers.'}
+  ,{name:'forgepilot_community_bridge_plan', description:'Plan a safe ARC, AWGym, awrelay, Relay, Forums, Spaces, and AwDesk connection.'}
+  ,{name:'forgepilot_create_community_bridge_pack', description:'Create a no-secrets community bridge artifact.'}
+];
+$('tools').innerHTML = tools.map(t => `<div class="tool"><b>${t.name}</b><div class="small">${t.description}</div></div>`).join('');
+async function call(name, arguments_) {
+  const endpoint = endpointValue();
+  const headers = {'content-type':'application/json'};
+  bearerToken = $('mcpToken').value.trim();
+  if (bearerToken) headers.authorization = `Bearer ${bearerToken}`;
+  let r;
+  try { r = await fetch(endpoint, {method:'POST', headers, body:JSON.stringify({jsonrpc:'2.0', id:crypto.randomUUID(), method:'tools/call', params:{name, arguments:arguments_}})}); }
+  catch (error) { throw new Error(`Cannot reach ${endpointForDisplay(endpoint)}. Check HTTPS, CORS, and that your self-hosted MCP server is running. ${error}`); }
+  const text = await r.text();
+  let data;
+  try { data = JSON.parse(text); } catch { throw new Error(`MCP returned HTTP ${r.status}, not JSON. Check the endpoint is the /mcp JSON-RPC URL.`); }
+  if (!r.ok) throw new Error(data.error || `MCP returned HTTP ${r.status}. Check the bearer token and server CORS allowlist.`);
+  if (data.error) throw new Error(data.error.message || data.error);
+  return data.result?.structuredContent || data.result || data.error;
+}
+async function run() {
+  $('status').textContent = 'Searching primary sources…'; $('output').textContent = '';
+  try {
+    const query = $('request').value;
+    const evidence = await call('forgepilot_search', {query, num_results:5});
+    $('status').textContent = 'Routing evidence through ForgePilot…';
+    const answer = await call('forgepilot_chat', {message:query, evidence:evidence.results || []});
+    $('status').textContent = `${evidence.mode || 'demo'} research · ${answer.mode || 'demo'} model`;
+    $('output').textContent = answer.content || JSON.stringify(answer, null, 2);
+  } catch (e) { $('status').textContent = 'Error'; $('output').textContent = String(e); }
+}
+$('run').onclick = run;
+$('artifact').onclick = async () => { $('status').textContent = 'Packaging evidence + report…'; $('output').textContent = ''; try { const data = await call('forgepilot_create_artifact', {request:$('request').value}); $('status').textContent = `Artifact created: ${data.run_id}`; $('output').textContent = JSON.stringify(data, null, 2); } catch (e) { $('status').textContent = 'Artifact error'; $('output').textContent = String(e); } };
+$('sharePack').onclick = async () => { $('status').textContent = 'Scaffolding MCP + WebMCP + PWA pack…'; $('output').textContent = ''; try { const data = await call('forgepilot_create_shareable_pack', {name:'Hackathon Process Agent Pack', description:$('request').value}); $('status').textContent = `Shareable pack created: ${data.name}`; $('output').textContent = JSON.stringify(data, null, 2); } catch (e) { $('status').textContent = 'Pack error'; $('output').textContent = String(e); } };
+$('connectorPack').onclick = async () => { $('status').textContent = 'Generating Claude Code + Codex connector…'; $('output').textContent = ''; try { const data = await call('forgepilot_create_connector_artifact', {}); $('status').textContent = 'Connector artifact ready'; $('output').textContent = JSON.stringify(data, null, 2); } catch (e) { $('status').textContent = 'Connector error'; $('output').textContent = String(e); } };
+$('configs').onclick = async () => { $('status').textContent = 'Generating client configs…'; const data = await call('forgepilot_generate_config', {}); $('output').textContent = JSON.stringify(data, null, 2); $('status').textContent = 'Config bundle ready'; };
+const bootstrap = {
+  local: `# Local-first: Bonsai + awdk\npython -m pip install awdk awm awnode\nadk setup --tier bonsai\nadk bonsai-local\nadk start\npython -m aitherium_pack serve`,
+  cloud: `# Cloud-first: awdk + chosen provider\npython -m pip install awdk awm awnode\nadk quickstart --cloud\nadk start\npython -m aitherium_pack serve`,
+  connect: `# Desktop + terminal surfaces\npython -m aitherium_pack config\npython -m aitherium_pack mcp\nnpm i -g @aitherium/awsh\nawsh\n\n# Remote AitherOS Online: expose /mcp only through authenticated HTTPS`
+};
+$('localPath').onclick = () => $('bootstrapOutput').textContent = bootstrap.local;
+$('acceleratePath').onclick = async () => {
+  $('status').textContent = 'Inspecting local aw* stack…';
+  try {
+    const data = await call('forgepilot_local_acceleration_plan', {model:'bonsai-27b'});
+    $('bootstrapOutput').textContent = `# Local Bonsai-27B acceleration\n${data.codex_claude_role}\n\nDetected commands:\n${Object.entries(data.detected_commands).map(([k,v]) => `- ${k}: ${v ? 'yes' : 'not found'}`).join('\n')}\n\nActivation plan:\n${data.commands.join('\n')}\n\n${data.safety}`;
+    $('status').textContent = 'Local stack plan ready';
+  } catch (e) { $('status').textContent = 'Stack inspection error'; $('bootstrapOutput').textContent = String(e); }
+};
+$('securityPath').onclick = async () => {
+  $('status').textContent = 'Loading awnboard + awiam + awbac policy…';
+  try {
+    const data = await call('forgepilot_local_acceleration_plan', {model:'bonsai-27b'});
+    $('bootstrapOutput').textContent = `# Secure front door\n${data.security_plane.join('\n')}\n\nCapability policy:\n${Object.entries(data.capability_policy).map(([k,v]) => `- ${k}: ${v.join(', ')}`).join('\n')}\n\nOrder of operations:\n1. awnboard receives the client request.\n2. awiam identifies the Aitherium device/session.\n3. awbac evaluates the requested capability and fails closed.\n4. awdit records the decision.\n5. Only then does awsh/awdk reach the local Bonsai-27B + MCP tools.`;
+    $('status').textContent = 'Security plane ready';
+  } catch (e) { $('status').textContent = 'Security plan error'; $('bootstrapOutput').textContent = String(e); }
+};
+$('cloudPath').onclick = () => $('bootstrapOutput').textContent = bootstrap.cloud;
+$('backendPath').onclick = async () => {
+  $('status').textContent = 'Inspecting Claude backend profiles…';
+  try {
+    const data = await call('forgepilot_backend_switch_plan', {profile:'deepseek-flash'});
+    $('bootstrapOutput').textContent = `# Claude Code backend switch\nFast alias: ${data.fast_alias}\n\nCommands:\n${data.commands.join('\n')}\n\nOther profiles:\n${data.other_profiles.join('\n')}\n\nawsettings: ${data.awsettings.role}\nDetected: ${JSON.stringify(data.detected, null, 2)}\n\n${data.verification}\n${data.note}`;
+    $('status').textContent = `Backend plan: ${data.status}`;
+  } catch (e) { $('status').textContent = 'Backend plan error'; $('bootstrapOutput').textContent = String(e); }
+};
+$('connectPath').onclick = () => $('bootstrapOutput').textContent = bootstrap.connect;
+$('devicePath').onclick = async () => {
+  $('status').textContent = 'Creating consent-scoped Aitherium device handoff…';
+  try {
+    const data = await call('forgepilot_start_device_flow', {scopes:['local.inference','mcp.tools','workspace.read','lan.control']});
+    $('bootstrapOutput').textContent = `# Aitherium device flow\nOpen: ${data.verification_uri}\nEnter code: ${data.user_code}\n\nScopes (user must approve): ${data.scopes.join(', ')}\n\nawsh handoff command:\n${data.awsh_command}\n\n${data.note}`;
+    $('status').textContent = `${data.mode} ready · no token stored`;
+  } catch (e) { $('status').textContent = 'Device flow error'; $('bootstrapOutput').textContent = String(e); }
+};
+const renderCommunity = (data) => `# Aitherium community bridge\n\nSurfaces:\n${Object.entries(data.surfaces).map(([key, url]) => `- ${key}: ${url}`).join('\n')}\n\nDetected:\n${Object.entries(data.detected).map(([key, value]) => `- ${key}: ${value ? 'yes' : 'not found'}`).join('\n')}\n\nInstall:\n${data.install_plan.join('\n')}\n\nDemo sequence:\n${data.demo_sequence.join('\n')}\n\nSecurity: ${data.security.default}\n${data.security.rule}`;
+$('communityPlan').onclick = async () => {
+  $('status').textContent = 'Mapping the Aitherium community loop…';
+  try {
+    const data = await call('forgepilot_community_bridge_plan', {});
+    $('communityOutput').textContent = renderCommunity(data);
+    $('status').textContent = 'Community bridge plan ready';
+  } catch (e) { $('status').textContent = 'Community plan error'; $('communityOutput').textContent = String(e); }
+};
+$('communityPack').onclick = async () => {
+  $('status').textContent = 'Packaging no-secrets community bridge…';
+  try {
+    const data = await call('forgepilot_create_community_bridge_pack', {name:'Aitherium Community Bridge'});
+    $('communityOutput').textContent = JSON.stringify(data, null, 2);
+    $('status').textContent = 'Community bridge pack ready';
+  } catch (e) { $('status').textContent = 'Community pack error'; $('communityOutput').textContent = String(e); }
+};
+const mobility = {
+  phone: `# Install on phone\n1. Termux / Pixel Linux Terminal: curl -fsSL https://aitherium.com/phone.sh | bash\n2. Verify the universal terminal: awsh --version\n3. Open the HTTPS AitherOS Online page or your published GitHub Pages URL.\n4. iPhone: Share → Add to Home Screen. Android: browser menu → Install app.\n5. Sign in to the MCP host; keep API keys on the host, never in the PWA.\n6. From Codex/Claude on the phone, point at the same authenticated MCP endpoint.\n\n# Remote rule\nThe MCP endpoint must be HTTPS and authenticated for internet use.`,
+  lan: `# Local LAN mode\n# On the host PC\npython -m aitherium_pack serve\n\n# From the phone on the same trusted Wi-Fi\nOpen http://<host-name>.local:8787/\n\nUse a password or private tunnel before sharing beyond the LAN. For a turnkey local private GUI, use GobboNet's LAN setup; for an Aitherium desktop, use awdesk.`,
+  publish: `# Self-service static page\npython -m aitherium_pack publish --output dist/agent-everywhere --mcp-endpoint https://YOUR-MCP-HOST.example/mcp\n\n# Then publish dist/agent-everywhere with GitHub Pages, Netlify, or Cloudflare Pages.\n# Keep MCP on a separate authenticated HTTPS service; the page is only the installable client.`
+};
+$('phonePath').onclick = () => $('mobilityOutput').textContent = mobility.phone;
+$('lanPath').onclick = () => $('mobilityOutput').textContent = mobility.lan;
+$('publishPath').onclick = () => $('mobilityOutput').textContent = mobility.publish;
+if ('serviceWorker' in navigator) navigator.serviceWorker.register(new URL('./sw.js?rev=3', document.baseURI), {scope: new URL('./', document.baseURI).pathname}).catch(() => {});
+// Current WebMCP draft: document.modelContext.registerTool({name, description, inputSchema, execute}).
+// Do not assume the browser supports it; the local UI remains usable without it.
+(async () => {
+  const mc = document.modelContext || navigator.modelContext;
+  if (!mc?.registerTool) return;
+  for (const tool of tools) {
+    await mc.registerTool({name:tool.name, title:tool.name, description:tool.description, inputSchema:{type:'object',properties:{}}, execute: async (args) => call(tool.name, args || {})});
+  }
+  $('status').textContent = 'WebMCP tools registered in this page';
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "forgepilot": {
+      "command": "python",
+      "args": ["-m", "aitherium_pack", "mcp"],
+      "cwd": "."
+    }
+  }
+}

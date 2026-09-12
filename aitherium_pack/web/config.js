@@ -1,0 +1,1 @@
+window.FORGEPILOT_MCP_ENDPOINT = "/mcp";

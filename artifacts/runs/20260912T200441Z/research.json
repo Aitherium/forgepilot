@@ -1,0 +1,13 @@
+{
+  "mode": "demo",
+  "query": "Turn this hackathon workflow into a shareable Codex + Claude + WebMCP pack with a local Bonsai path, awnboard authorization, and a phone-ready PWA.",
+  "results": [
+    {
+      "title": "Add EXA_API_KEY for live research",
+      "url": "https://docs.exa.ai/reference/search-api-guide-for-coding-agents",
+      "highlights": [
+        "ForgePilot is running in offline demo mode."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "awdk": false,
+  "awm": false,
+  "awresearch": false,
+  "awfind": false,
+  "awbrowse": false,
+  "awrun": false,
+  "awrelay": false,
+  "awgraph": false,
+  "awgit": false,
+  "awseal": false,
+  "awshare": false
+}

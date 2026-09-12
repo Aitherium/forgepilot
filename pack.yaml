@@ -1,0 +1,27 @@
+name: forgepilot
+version: 0.1.0
+display_name: ForgePilot — Agent Integration Architect
+studio_url: https://studio.aitherium.com/
+description: >-
+  A portable Aitherium agent pack that researches APIs with Exa, routes model
+  work through OpenRouter, and emits MCP/WebMCP integration artifacts for the
+  desktop tools where builders already work.
+identity: forgepilot
+system_prompt_file: skills/forgepilot.md
+skills:
+  - skills/research.md
+  - skills/integration.md
+tools:
+  - forgepilot_health
+  - forgepilot_search
+  - forgepilot_chat
+  - forgepilot_generate_config
+  - forgepilot_start_device_flow
+  - forgepilot_local_acceleration_plan
+  - forgepilot_create_shareable_pack
+  - forgepilot_create_connector_artifact
+permissions:
+  network:
+    - api.exa.ai
+    - openrouter.ai
+  filesystem: read-only

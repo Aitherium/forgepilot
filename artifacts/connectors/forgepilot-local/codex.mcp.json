@@ -1,0 +1,16 @@
+{
+  "mcp_servers": {
+    "forgepilot": {
+      "command": "C:\\Users\\david\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "args": [
+        "-m",
+        "aitherium_pack",
+        "mcp"
+      ],
+      "cwd": "C:\\Users\\david\\OneDrive\\Documents\\ChatGPT\\ai-tinkerers-hackathon",
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+# Default-deny awbac policy for agents-everywhere-demo-tool
+default: deny
+human_approval: required
+identity: awiam
+front_door: awnboard
+audit: awdit
+allow:
+  - mcp.tools
+  - workspace.read
+deny:
+  - shell
+  - credentials.read
+  - public.listen

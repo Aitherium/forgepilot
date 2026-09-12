@@ -1,0 +1,32 @@
+{
+  "name": "hackathon",
+  "interface": {
+    "displayName": "AI Tinkerers Hackathon"
+  },
+  "plugins": [
+    {
+      "name": "forgepilot-agent-everywhere",
+      "source": {
+        "source": "local",
+        "path": "./plugins/forgepilot-agent-everywhere"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "aitherium-community-bridge",
+      "source": {
+        "source": "local",
+        "path": "./plugins/aitherium-community-bridge"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

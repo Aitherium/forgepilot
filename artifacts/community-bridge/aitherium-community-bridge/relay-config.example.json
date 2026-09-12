@@ -1,0 +1,9 @@
+{
+  "relay_url": "https://relay.aitherium.com/",
+  "agent_id": "replace-me",
+  "scopes": [
+    "mcp.tools",
+    "workspace.read"
+  ],
+  "token": "<never-commit>"
+}

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "agents-everywhere-demo-tool": {
+      "command": "python",
+      "args": [
+        "-m",
+        "aitherium_pack",
+        "mcp"
+      ]
+    }
+  }
+}

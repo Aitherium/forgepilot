@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "hackathon-process-agent-pack": {
+      "command": "python",
+      "args": [
+        "-m",
+        "aitherium_pack",
+        "mcp"
+      ]
+    }
+  }
+}
