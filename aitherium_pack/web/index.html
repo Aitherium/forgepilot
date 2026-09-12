@@ -37,14 +37,14 @@
     </div>
     <details style="margin-top:10px"><summary class="small">Prefer to paste one line?</summary>
       <div class="connection-grid">
-        <div><label>Windows (any PowerShell window)</label><input readonly value="irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex" onclick="this.select();navigator.clipboard&&navigator.clipboard.writeText(this.value)" /></div>
-        <div><label>macOS / Linux / Termux</label><input readonly value="curl -fsSL https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.sh | sh" onclick="this.select();navigator.clipboard&&navigator.clipboard.writeText(this.value)" /></div>
+        <div><label>Windows (any PowerShell window)</label><input readonly value="$env:AITHERZERO_PLAYBOOK='dev-workstation,connect'; irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex" onclick="this.select();navigator.clipboard&&navigator.clipboard.writeText(this.value)" /></div>
+        <div><label>macOS / Linux / Termux</label><input readonly value="curl -fsSL https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.sh | sh -s -- --playbook dev-workstation,connect" onclick="this.select();navigator.clipboard&&navigator.clipboard.writeText(this.value)" /></div>
       </div>
-      <div class="small">Click a line to copy it. Afterwards: <code>Invoke-AitherPlaybook connect</code> (Windows) / <code>… --playbook connect</code> (Unix), then <code>awsh</code>.</div>
+      <div class="small">Click a line to copy it. Then open a new terminal and type <code>awsh</code>.</div>
     </details>
     <script>
       (function(){
-        var line = "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Net.ServicePointManager]::SecurityProtocol='Tls12'; $env:AITHERZERO_PLAYBOOK='dev-workstation'; irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex; $env:AITHERZERO_PLAYBOOK='connect'; irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex\"";
+        var line = "$env:AITHERZERO_PLAYBOOK='dev-workstation,connect'; irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex";
         var b = document.getElementById('copyWin'), n = document.getElementById('copyWinNote');
         if (!b) return;
         b.addEventListener('click', function(){

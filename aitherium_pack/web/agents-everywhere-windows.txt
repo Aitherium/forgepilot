@@ -2,7 +2,7 @@ Agents Everywhere - Windows, no download needed.
 
 Open any PowerShell window (Start menu -> type "powershell" -> Enter), paste this ONE line, press Enter:
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command "[Net.ServicePointManager]::SecurityProtocol='Tls12'; $env:AITHERZERO_PLAYBOOK='dev-workstation'; irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex; $env:AITHERZERO_PLAYBOOK='connect'; irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex"
+$env:AITHERZERO_PLAYBOOK='dev-workstation,connect'; irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex
 
 What happens:
   1. PowerShell 7, Python, Git, Node, gh, adk, awsh are installed (each one verified for real).

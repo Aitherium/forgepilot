@@ -10,8 +10,7 @@ echo "  Agents Everywhere - one click, this Mac becomes a connected agent node."
 echo "  Step 1/2  tools    (Python, Git, Node, gh, adk, awsh)"
 echo "  Step 2/2  connect  (sign in - a browser tab will open - inference, IDE wiring)"
 echo
-curl -fsSL https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.sh | sh -s -- --playbook dev-workstation
-curl -fsSL https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.sh | sh -s -- --playbook connect
+curl -fsSL https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.sh | sh -s -- --playbook dev-workstation,connect
 echo
 echo "  DONE. Open a new terminal and type:  awsh"
 echo "  (Claude Code / Cursor are already wired to the Aitherium MCP gateway.)"
