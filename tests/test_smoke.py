@@ -86,7 +86,7 @@ class ForgePilotSmokeTests(unittest.TestCase):
             result = create_community_bridge_pack(output_root=temp)
             pack_dir = Path(result["path"])
             self.assertTrue((pack_dir / "relay-config.example.json").exists())
-            self.assertIn("<never-commit>", (pack_dir / "relay-config.example.json").read_text())
+            self.assertIn("<never-commit>", (pack_dir / "relay-config.example.json").read_text(encoding="utf-8"))
             self.assertNotIn("Bearer ", "".join(path.read_text(encoding="utf-8") for path in pack_dir.iterdir() if path.is_file()))
         finally:
             shutil.rmtree(temp, ignore_errors=True)
@@ -171,7 +171,7 @@ class ForgePilotSmokeTests(unittest.TestCase):
             pack_dir = Path(result["path"])
             self.assertTrue((pack_dir / "pack.json").exists())
             self.assertTrue((pack_dir / "webmcp.js").exists())
-            self.assertIn("awnboard", (pack_dir / "pack.json").read_text())
+            self.assertIn("awnboard", (pack_dir / "pack.json").read_text(encoding="utf-8"))
         finally:
             shutil.rmtree(temp, ignore_errors=True)
 
@@ -187,7 +187,7 @@ class ForgePilotSmokeTests(unittest.TestCase):
             self.assertTrue((connector_dir / "claude.mcp.json").exists())
             self.assertTrue((connector_dir / "codex.mcp.json").exists())
             self.assertTrue((connector_dir / "bootstrap-full.ps1").exists())
-            self.assertIn("aitherium_pack", (connector_dir / "install.sh").read_text())
+            self.assertIn("aitherium_pack", (connector_dir / "install.sh").read_text(encoding="utf-8"))
         finally:
             shutil.rmtree(temp, ignore_errors=True)
     def test_artifact_bundle_has_manifest(self):
@@ -199,7 +199,7 @@ class ForgePilotSmokeTests(unittest.TestCase):
             result = create_run("Create a safe MCP integration plan", temp)
             run_dir = Path(result["path"])
             self.assertTrue((run_dir / "report.md").exists())
-            manifest = json.loads((run_dir / "manifest.json").read_text())
+            manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
             self.assertIn("report.md", manifest["files"])
         finally:
             shutil.rmtree(temp, ignore_errors=True)
@@ -214,13 +214,13 @@ class ForgePilotSmokeTests(unittest.TestCase):
             publish_static(temp, "https://example.test/mcp")
             self.assertTrue((temp / "manifest.webmanifest").exists())
             self.assertTrue((temp / "sw.js").exists())
-            self.assertIn("https://example.test/mcp", (temp / "config.js").read_text())
-            index = (temp / "index.html").read_text()
+            self.assertIn("https://example.test/mcp", (temp / "config.js").read_text(encoding="utf-8"))
+            index = (temp / "index.html").read_text(encoding="utf-8")
             self.assertIn('href="./manifest.webmanifest"', index)
             self.assertIn('src="./config.js"', index)
-            manifest = json.loads((temp / "manifest.webmanifest").read_text())
+            manifest = json.loads((temp / "manifest.webmanifest").read_text(encoding="utf-8"))
             self.assertEqual(manifest["start_url"], "./")
-            self.assertIn("new URL('./', self.location)", (temp / "sw.js").read_text())
+            self.assertIn("new URL('./', self.location)", (temp / "sw.js").read_text(encoding="utf-8"))
         finally:
             shutil.rmtree(temp, ignore_errors=True)
 
