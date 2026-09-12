@@ -31,7 +31,7 @@
     <h2 id="getstarted-title">Put an agent on this device. No terminal typing.</h2>
     <p class="small">Download the launcher for your machine and open it. It installs PowerShell 7, the toolchain, <code>adk</code> and <code>awsh</code>, then signs you in (a browser tab opens), checks inference, and wires Claude Code / Cursor to the Aitherium MCP gateway — every step verified, every step safe to re-run. Source: <a href="https://github.com/Aitherium/AitherZero" target="_blank" rel="noopener">AitherZero</a> playbooks <code>dev-workstation</code> + <code>connect</code>.</p>
     <div class="connection-grid" style="margin-top:10px">
-      <div><a class="button-link" href="agents-everywhere-windows.cmd" download><button style="width:100%">⊞ Windows — download &amp; open</button></a><div class="small">SmartScreen: <em>More info → Run anyway</em> (unsigned launcher; it only runs the public bootstrap).</div></div>
+      <div><button id="copyWin" style="width:100%">⊞ Windows — copy one line, paste in PowerShell</button><div class="small" id="copyWinNote">Start → type <code>powershell</code> → paste → Enter. Nothing to download. <a href="agents-everywhere-windows.txt" target="_blank" rel="noopener">as .txt</a> · <a href="agents-everywhere-windows.cmd" download>as .cmd</a> (SmartScreen: More info → Run anyway)</div></div>
       <div><a class="button-link" href="agents-everywhere-mac.command" download><button style="width:100%"> macOS — download &amp; open</button></a><div class="small">First time: right-click → Open.</div></div>
       <div><a class="button-link" href="agents-everywhere-linux.sh" download><button style="width:100%">🐧 Linux / 📱 Termux — download</button></a><div class="small">Then <code>sh agents-everywhere-linux.sh</code>. Phones: install Termux, same file.</div></div>
     </div>
@@ -42,6 +42,18 @@
       </div>
       <div class="small">Click a line to copy it. Afterwards: <code>Invoke-AitherPlaybook connect</code> (Windows) / <code>… --playbook connect</code> (Unix), then <code>awsh</code>.</div>
     </details>
+    <script>
+      (function(){
+        var line = "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Net.ServicePointManager]::SecurityProtocol='Tls12'; $env:AITHERZERO_PLAYBOOK='dev-workstation'; irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex; $env:AITHERZERO_PLAYBOOK='connect'; irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex\"";
+        var b = document.getElementById('copyWin'), n = document.getElementById('copyWinNote');
+        if (!b) return;
+        b.addEventListener('click', function(){
+          var done = function(){ b.textContent = '✓ Copied — now paste into PowerShell and press Enter'; };
+          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(line).then(done, function(){ window.prompt('Copy this line:', line); });
+          else window.prompt('Copy this line:', line);
+        });
+      })();
+    </script>
   </section>
   <section class="panel" aria-labelledby="connection-title">
     <div class="eyebrow">Self-hosted connection</div>

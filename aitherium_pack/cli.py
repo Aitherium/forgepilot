@@ -30,7 +30,7 @@ def publish_static(output: Path, mcp_endpoint: str = "/mcp") -> Path:
     for name in (
         "index.html", "manifest.webmanifest", "sw.js", "icon.svg",
         # one-click launchers linked from the "Agents Everywhere" panel
-        "agents-everywhere-windows.cmd", "agents-everywhere-mac.command", "agents-everywhere-linux.sh",
+        "agents-everywhere-windows.cmd", "agents-everywhere-windows.txt", "agents-everywhere-mac.command", "agents-everywhere-linux.sh",
     ):
         (output / name).write_bytes((web_root / name).read_bytes())
     (output / "config.js").write_text(

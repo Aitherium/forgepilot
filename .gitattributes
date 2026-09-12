@@ -1,0 +1,11 @@
+# Launchers must keep their native line endings regardless of core.autocrlf:
+# cmd.exe misparses goto labels on LF-only batch files; sh chokes on CRLF.
+*.cmd      text eol=crlf
+*.bat      text eol=crlf
+*.command  text eol=lf
+*.sh       text eol=lf
+*.py       text eol=lf
+*.html     text eol=lf
+*.js       text eol=lf
+*.md       text eol=lf
+*.yml      text eol=lf
