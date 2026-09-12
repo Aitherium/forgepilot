@@ -10,8 +10,14 @@ permissions:
   contents: read
 
 jobs:
+  # Build + unit tests + static bundle on every OS the launchers target.
   test-and-build:
-    runs-on: ubuntu-latest
+    name: test+build (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -28,22 +34,83 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Build the GitHub Pages bundle
+        shell: bash
         run: python -m aitherium_pack publish --output _site --mcp-endpoint "${FORGEPILOT_MCP_ENDPOINT:-/mcp}"
         env:
           FORGEPILOT_MCP_ENDPOINT: ${{ vars.FORGEPILOT_MCP_ENDPOINT }}
 
-      - name: Check the static bundle
+      - name: Check the static bundle (page, PWA files, all three launchers)
         shell: bash
         run: |
           test -f _site/index.html
           test -f _site/manifest.webmanifest
           test -f _site/sw.js
           test -f _site/config.js
+          test -f _site/agents-everywhere-windows.cmd
+          test -f _site/agents-everywhere-mac.command
+          test -f _site/agents-everywhere-linux.sh
           grep -q '"start_url": "./"' _site/manifest.webmanifest
           grep -q 'FORGEPILOT_MCP_ENDPOINT' _site/config.js
+          grep -q 'agents-everywhere-windows.cmd' _site/index.html
+          # launchers must be shell-clean; .cmd must be CRLF for goto labels
+          sh -n _site/agents-everywhere-mac.command
+          sh -n _site/agents-everywhere-linux.sh
+          if grep -qv $'\r$' _site/agents-everywhere-windows.cmd; then echo "windows.cmd has LF-only lines"; exit 1; fi
+
+      - name: MCP server answers (health + tools/list)
+        shell: bash
+        run: |
+          python -m aitherium_pack serve > serve.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:8787/health && break; sleep 1; done
+          curl -fsS http://127.0.0.1:8787/health | grep -q '"status": *"ok"'
+          curl -fsS -X POST http://127.0.0.1:8787/mcp -H 'content-type: application/json' \
+            -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | grep -q forgepilot_health
 
       - name: Upload preview bundle
+        if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
           name: forgepilot-pages-preview
           path: _site
+
+  # The thing a user actually double-clicks. Runs the real launcher from the
+  # built bundle on a fresh runner: bootstrap -> dev-workstation -> connect
+  # (login/quickstart skip themselves when non-interactive).
+  launcher:
+    name: launcher (${{ matrix.os }})
+    needs: test-and-build
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    env:
+      AITHERZERO_NONINTERACTIVE: '1'
+      CI: 'true'
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Windows — open agents-everywhere-windows.cmd
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: echo. | call aitherium_pack\web\agents-everywhere-windows.cmd
+
+      - name: macOS — open agents-everywhere-mac.command
+        if: runner.os == 'macOS'
+        run: sh aitherium_pack/web/agents-everywhere-mac.command < /dev/null
+
+      - name: Linux — sh agents-everywhere-linux.sh
+        if: runner.os == 'Linux'
+        run: sh aitherium_pack/web/agents-everywhere-linux.sh < /dev/null
+
+      - name: Tools answer
+        shell: bash
+        run: |
+          case "$RUNNER_OS" in
+            Windows) export PATH="$PATH:/c/Users/runneradmin/AppData/Roaming/npm:$(python -c 'import site;print(site.USER_BASE)')/Python312/Scripts:$LOCALAPPDATA/Programs/Python/Python312/Scripts" ;;
+            *)       export PATH="$HOME/.local/bin:$(npm prefix -g)/bin:$PATH" ;;
+          esac
+          adk --help | head -1
+          awsh --version
