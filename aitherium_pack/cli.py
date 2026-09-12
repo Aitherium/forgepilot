@@ -27,7 +27,11 @@ def publish_static(output: Path, mcp_endpoint: str = "/mcp") -> Path:
     """Build a host-agnostic PWA bundle for GitHub Pages or any static host."""
     web_root = Path(__file__).resolve().parent / "web"
     output.mkdir(parents=True, exist_ok=True)
-    for name in ("index.html", "manifest.webmanifest", "sw.js", "icon.svg"):
+    for name in (
+        "index.html", "manifest.webmanifest", "sw.js", "icon.svg",
+        # one-click launchers linked from the "Agents Everywhere" panel
+        "agents-everywhere-windows.cmd", "agents-everywhere-mac.command", "agents-everywhere-linux.sh",
+    ):
         (output / name).write_bytes((web_root / name).read_bytes())
     (output / "config.js").write_text(
         f"window.FORGEPILOT_MCP_ENDPOINT = {json.dumps(mcp_endpoint)};\n",

@@ -26,6 +26,23 @@
   <h1>Build the tool <span>that builds the tools.</span></h1>
   <p class="lede">This demo is its own hackathon process: start with an idea, research it, wire the local aw* stack, gate it with identity and policy, then ship a shareable MCP + WebMCP + PWA pack for the next builder.</p>
   <div class="chips"><div class="chip">static client</div><div class="chip">awdk pack</div><div class="chip">MCP JSON-RPC</div><div class="chip">WebMCP page tools</div><div class="chip">read-only by default</div></div>
+  <section class="panel" aria-labelledby="getstarted-title" style="border-color:#7c5cff">
+    <div class="eyebrow">Agents Everywhere · one click</div>
+    <h2 id="getstarted-title">Put an agent on this device. No terminal typing.</h2>
+    <p class="small">Download the launcher for your machine and open it. It installs PowerShell 7, the toolchain, <code>adk</code> and <code>awsh</code>, then signs you in (a browser tab opens), checks inference, and wires Claude Code / Cursor to the Aitherium MCP gateway — every step verified, every step safe to re-run. Source: <a href="https://github.com/Aitherium/AitherZero" target="_blank" rel="noopener">AitherZero</a> playbooks <code>dev-workstation</code> + <code>connect</code>.</p>
+    <div class="connection-grid" style="margin-top:10px">
+      <div><a class="button-link" href="agents-everywhere-windows.cmd" download><button style="width:100%">⊞ Windows — download &amp; open</button></a><div class="small">SmartScreen: <em>More info → Run anyway</em> (unsigned launcher; it only runs the public bootstrap).</div></div>
+      <div><a class="button-link" href="agents-everywhere-mac.command" download><button style="width:100%"> macOS — download &amp; open</button></a><div class="small">First time: right-click → Open.</div></div>
+      <div><a class="button-link" href="agents-everywhere-linux.sh" download><button style="width:100%">🐧 Linux / 📱 Termux — download</button></a><div class="small">Then <code>sh agents-everywhere-linux.sh</code>. Phones: install Termux, same file.</div></div>
+    </div>
+    <details style="margin-top:10px"><summary class="small">Prefer to paste one line?</summary>
+      <div class="connection-grid">
+        <div><label>Windows (any PowerShell window)</label><input readonly value="irm https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.ps1 | iex" onclick="this.select();navigator.clipboard&&navigator.clipboard.writeText(this.value)" /></div>
+        <div><label>macOS / Linux / Termux</label><input readonly value="curl -fsSL https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.sh | sh" onclick="this.select();navigator.clipboard&&navigator.clipboard.writeText(this.value)" /></div>
+      </div>
+      <div class="small">Click a line to copy it. Afterwards: <code>Invoke-AitherPlaybook connect</code> (Windows) / <code>… --playbook connect</code> (Unix), then <code>awsh</code>.</div>
+    </details>
+  </section>
   <section class="panel" aria-labelledby="connection-title">
     <div class="eyebrow">Self-hosted connection</div>
     <h2 id="connection-title">Bring your own MCP node.</h2>
