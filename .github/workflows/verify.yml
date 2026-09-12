@@ -55,7 +55,14 @@ jobs:
           # launchers must be shell-clean; .cmd must be CRLF for goto labels
           sh -n _site/agents-everywhere-mac.command
           sh -n _site/agents-everywhere-linux.sh
-          if grep -qv $'\r$' _site/agents-everywhere-windows.cmd; then echo "windows.cmd has LF-only lines"; exit 1; fi
+          python - <<'PY'
+          import sys
+          cmd = open("_site/agents-everywhere-windows.cmd", "rb").read()
+          bare_lf = cmd.replace(b"\r\n", b"").count(b"\n")
+          sh = open("_site/agents-everywhere-linux.sh", "rb").read() + open("_site/agents-everywhere-mac.command", "rb").read()
+          print(f"windows.cmd bare LF: {bare_lf}; sh/command CR: {sh.count(b'\\r')}")
+          sys.exit(0 if bare_lf == 0 and b"\r" not in sh else 1)
+          PY
 
       - name: MCP server answers (health + tools/list)
         shell: bash
