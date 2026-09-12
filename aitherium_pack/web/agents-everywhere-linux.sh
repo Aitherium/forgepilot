@@ -7,10 +7,12 @@ set -e
 echo
 echo "  Agents Everywhere - one command, this device becomes a connected agent node."
 echo
-curl -fsSL https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.sh | sh -s -- --playbook dev-workstation
-if command -v pwsh >/dev/null 2>&1; then
-  curl -fsSL https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.sh | sh -s -- --playbook connect
+if command -v pwsh >/dev/null 2>&1 || [ -z "${TERMUX_VERSION:-}" ]; then
+  # pwsh lane (Linux/macOS): both playbooks in one run.
+  curl -fsSL https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.sh | sh -s -- --playbook dev-workstation,connect
 else
+  # Termux: native lane installs the tools; connect steps by hand, same order as the playbook.
+  curl -fsSL https://raw.githubusercontent.com/Aitherium/AitherZero/main/bootstrap.sh | sh -s -- --playbook dev-workstation
   # Termux / no-pwsh hosts: the connect steps by hand, same order as the playbook.
   adk login || adk login --github
   adk mcp setup --mode remote --ide claude-code || true
