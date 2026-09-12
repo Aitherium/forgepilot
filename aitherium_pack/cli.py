@@ -32,7 +32,15 @@ def publish_static(output: Path, mcp_endpoint: str = "/mcp") -> Path:
         # one-click launchers linked from the "Agents Everywhere" panel
         "agents-everywhere-windows.cmd", "agents-everywhere-windows.txt", "agents-everywhere-mac.command", "agents-everywhere-linux.sh",
     ):
-        (output / name).write_bytes((web_root / name).read_bytes())
+        data = (web_root / name).read_bytes()
+        # Launchers must ship with native line endings no matter how git checked
+        # them out: cmd.exe misparses goto labels on LF-only batch files, and sh
+        # rejects CRLF. Normalize here so the published bundle is deterministic.
+        if name.endswith(".cmd"):
+            data = data.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
+        elif name.endswith((".sh", ".command")):
+            data = data.replace(b"\r\n", b"\n")
+        (output / name).write_bytes(data)
     (output / "config.js").write_text(
         f"window.FORGEPILOT_MCP_ENDPOINT = {json.dumps(mcp_endpoint)};\n",
         encoding="utf-8",
